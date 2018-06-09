@@ -2,8 +2,8 @@ package rainorsun.com.rainorsun.data.api.model;
 
 public class DarkSkyResponse {
     private CurrentlyWeatherData currently;
-    private HourlyWeatherData[] hourly;
-    private DailyWeatherData[] daily;
+    private Hourly hourly;
+    private Daily daily;
 
     public CurrentlyWeatherData getCurrently() {
         return currently;
@@ -13,19 +13,19 @@ public class DarkSkyResponse {
         this.currently = currently;
     }
 
-    public HourlyWeatherData[] getHourly() {
+    public Hourly getHourly() {
         return hourly;
     }
 
-    public void setHourly(HourlyWeatherData[] hourly) {
+    public void setHourly(Hourly hourly) {
         this.hourly = hourly;
     }
 
-    public DailyWeatherData[] getDaily() {
+    public Daily getDaily() {
         return daily;
     }
 
-    public void setDaily(DailyWeatherData[] daily) {
+    public void setDaily(Daily daily) {
         this.daily = daily;
     }
 }

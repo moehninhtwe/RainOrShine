@@ -35,10 +35,10 @@ public class WeatherData {
     private float windBearing;
     private float cloudCover;
     private int uvIndex;
-    private int visibility;
+    private float visibility;
     private float ozone;
     private float precipIntensity;
-    private int precipProbability;
+    private float precipProbability;
     private String precipType;
 
     public long getTime() {
@@ -137,7 +137,7 @@ public class WeatherData {
         this.uvIndex = uvIndex;
     }
 
-    public int getVisibility() {
+    public float getVisibility() {
         return visibility;
     }
 
@@ -161,11 +161,11 @@ public class WeatherData {
         this.precipIntensity = precipIntensity;
     }
 
-    public int getPrecipProbability() {
+    public float getPrecipProbability() {
         return precipProbability;
     }
 
-    public void setPrecipProbability(int precipProbability) {
+    public void setPrecipProbability(float precipProbability) {
         this.precipProbability = precipProbability;
     }
 
