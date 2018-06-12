@@ -12,7 +12,11 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"/>
   <TextView
-      android:id="@+id/tv_temperature"
+      android:id="@+id/tv_high_temperature"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"/>
+  <TextView
+      android:id="@+id/tv_low_temperature"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"/>
 

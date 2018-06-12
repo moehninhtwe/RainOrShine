@@ -1,5 +1,6 @@
 package rainorsun.com.rainorsun.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,8 +15,10 @@ import rainorsun.com.rainorsun.data.api.model.HourlyWeatherData;
 public class HourlyWeatherAdapter
     extends RecyclerView.Adapter<HourlyWeatherAdapter.HourlyWeatherViewHolder> {
     private HourlyWeatherData[] listOfHourlyData;
+    private Context context;
 
-    public HourlyWeatherAdapter() {
+    public HourlyWeatherAdapter(Context context) {
+        this.context = context;
     }
 
     public void setListOfHourlyData(HourlyWeatherData[] listOfHourlyData) {
@@ -29,10 +32,14 @@ public class HourlyWeatherAdapter
         return new HourlyWeatherViewHolder(view);
     }
 
-    @Override public void onBindViewHolder(@NonNull HourlyWeatherViewHolder holder, int position) {
-        holder.tvTemperature.setText(String.valueOf(listOfHourlyData[position].getTemperature()));
-        holder.tvTime.setText(
+    @Override public void onBindViewHolder(@NonNull HourlyWeatherViewHolder hourlyWeatherViewHolder,
+        int position) {
+        hourlyWeatherViewHolder.tvTemperature.setText(
+            String.valueOf(listOfHourlyData[position].getTemperature()));
+        hourlyWeatherViewHolder.tvTime.setText(
             Util.convertMilliSecondToHourFormat(listOfHourlyData[position].getTime()));
+        hourlyWeatherViewHolder.ivWeatherIcon.setImageDrawable(
+            Util.getWeatherIcon(context, listOfHourlyData[position].getIcon()));
     }
 
     @Override public int getItemCount() {

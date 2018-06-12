@@ -1,18 +1,24 @@
 package rainorsun.com.rainorsun.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import rainorsun.com.rainorsun.R;
+import rainorsun.com.rainorsun.Util;
 import rainorsun.com.rainorsun.data.api.model.DailyWeatherData;
 
 public class DailyWeatherAdapter
     extends RecyclerView.Adapter<DailyWeatherAdapter.DailyWeatherViewHolder> {
     private DailyWeatherData[] listOfDailyWeather;
+    private Context context;
 
-    public DailyWeatherAdapter() {
+    public DailyWeatherAdapter(Context context) {
+        this.context = context;
     }
 
     public void setDailyWeatherData(DailyWeatherData[] listOfDailyWeather) {
@@ -21,12 +27,21 @@ public class DailyWeatherAdapter
 
     @NonNull @Override
     public DailyWeatherViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        return null;
+        View view = LayoutInflater.from(parent.getContext())
+            .inflate(R.layout.daily_weather_view, parent, false);
+        return new DailyWeatherViewHolder(view);
     }
 
-    @Override public void onBindViewHolder(@NonNull DailyWeatherViewHolder holder, int position) {
-
+    @Override public void onBindViewHolder(@NonNull DailyWeatherViewHolder dailyWeatherViewHolder,
+        int position) {
+        dailyWeatherViewHolder.tvHighTemperature.setText(
+            String.valueOf(Math.round(listOfDailyWeather[position].getTemperatureHigh())));
+        dailyWeatherViewHolder.tvLowTemperature.setText(
+            String.valueOf(Math.round(listOfDailyWeather[position].getTemperatureLow())));
+        dailyWeatherViewHolder.tvDay.setText(
+            Util.covertMilliSecondToDay(context, listOfDailyWeather[position].getTime()));
+        dailyWeatherViewHolder.ivWeatherIcon.setImageDrawable(
+            Util.getWeatherIcon(context, listOfDailyWeather[position].getIcon()));
     }
 
     @Override public int getItemCount() {
@@ -35,11 +50,16 @@ public class DailyWeatherAdapter
 
     public class DailyWeatherViewHolder extends RecyclerView.ViewHolder {
         private TextView tvDay;
+        private TextView tvHighTemperature;
+        private TextView tvLowTemperature;
         private ImageView ivWeatherIcon;
-        private TextView tvTemperature;
 
         public DailyWeatherViewHolder(View view) {
             super(view);
+            tvDay = view.findViewById(R.id.tv_day);
+            tvHighTemperature = view.findViewById(R.id.tv_high_temperature);
+            tvLowTemperature = view.findViewById(R.id.tv_low_temperature);
+            ivWeatherIcon = view.findViewById(R.id.iv_weather_icon);
         }
     }
 }
