@@ -35,7 +35,8 @@ public class HourlyWeatherAdapter
     @Override public void onBindViewHolder(@NonNull HourlyWeatherViewHolder hourlyWeatherViewHolder,
         int position) {
         hourlyWeatherViewHolder.tvTemperature.setText(
-            String.valueOf(listOfHourlyData[position].getTemperature()));
+            String.valueOf(Math.round(listOfHourlyData[position].getTemperature()))
+                + (char) 0x00B0);
         hourlyWeatherViewHolder.tvTime.setText(
             Util.convertMilliSecondToHourFormat(listOfHourlyData[position].getTime()));
         hourlyWeatherViewHolder.ivWeatherIcon.setImageDrawable(

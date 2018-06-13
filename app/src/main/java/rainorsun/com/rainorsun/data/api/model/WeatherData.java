@@ -1,5 +1,7 @@
 package rainorsun.com.rainorsun.data.api.model;
 
+import java.io.Serializable;
+
 /**
  * {
  * "time": 1528398000,
@@ -22,7 +24,7 @@ package rainorsun.com.rainorsun.data.api.model;
  * },
  */
 
-public class WeatherData {
+public class WeatherData implements Serializable {
     private long time;
     private String summary;
     private String icon;

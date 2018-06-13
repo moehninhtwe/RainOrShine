@@ -4,12 +4,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.TextView;
-import java.util.concurrent.TimeUnit;
 import rainorsun.com.rainorsun.adapter.DailyWeatherAdapter;
 import rainorsun.com.rainorsun.adapter.HourlyWeatherAdapter;
 import rainorsun.com.rainorsun.data.api.model.CurrentlyWeatherData;
 import rainorsun.com.rainorsun.data.api.model.Daily;
+import rainorsun.com.rainorsun.data.api.model.DailyWeatherData;
 import rainorsun.com.rainorsun.data.api.model.DarkSkyResponse;
 import rainorsun.com.rainorsun.data.api.model.Hourly;
 import rainorsun.com.rainorsun.data.api.provider.GetWeatherForecast;
@@ -20,9 +21,12 @@ public class WeatherForecastActivity extends AppCompatActivity {
     private HourlyWeatherAdapter hourlyWeatherAdapter;
     private DailyWeatherAdapter dailyWeatherAdapter;
     private TextView tvLocation;
-    private TextView tvCondition;
-    private TextView tvTemperature;
-    private TextView tvDay;
+    private TextView tvTodayCondition;
+    private TextView tvTodayTemperature;
+    private TextView tvDayOfToday;
+    private TextView tvTodayHighTemperature;
+    private TextView tvTodayLowTemperature;
+    private WeatherForecastDetailsFragment weatherForecastDetailsFragment;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,19 +37,22 @@ public class WeatherForecastActivity extends AppCompatActivity {
         rvHourlyData.setLayoutManager(
             new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         hourlyWeatherAdapter = new HourlyWeatherAdapter(this);
-        rvHourlyData.setAdapter(hourlyWeatherAdapter);
 
         /** set adapter for daily view **/
         rvDailyData = findViewById(R.id.rv_daily_forecast);
         rvDailyData.setLayoutManager(
             new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         dailyWeatherAdapter = new DailyWeatherAdapter(this);
-        rvDailyData.setAdapter(dailyWeatherAdapter);
 
+        /** for currently view **/
         tvLocation = findViewById(R.id.tv_location);
-        tvCondition = findViewById(R.id.tv_condition);
-        tvTemperature = findViewById(R.id.tv_temperature);
-        tvDay = findViewById(R.id.tv_day);
+        tvTodayCondition = findViewById(R.id.tv_condition);
+        tvTodayTemperature = findViewById(R.id.tv_temperature);
+        tvDayOfToday = findViewById(R.id.tv_day);
+        tvTodayHighTemperature = findViewById(R.id.tv_high_temperature);
+        tvTodayLowTemperature = findViewById(R.id.tv_low_temperature);
+
+        weatherForecastDetailsFragment = new WeatherForecastDetailsFragment();
     }
 
     @Override protected void onResume() {
@@ -56,31 +63,52 @@ public class WeatherForecastActivity extends AppCompatActivity {
             }
 
             @Override public void onFailure(String errorMsg) {
+                Log.d("Rain or sun", errorMsg);
             }
         });
     }
 
     private void setUI(DarkSkyResponse darkSkyResponse) {
+        setCurrentlyWeatherUI(darkSkyResponse.getCurrently());
         setHourlyWeatherUI(darkSkyResponse.getHourly());
         setDailyWeatherUI(darkSkyResponse.getDaily());
-        setTodayWeatherUI(darkSkyResponse.getCurrently());
+        setTodayWeatherUI(darkSkyResponse.getDaily().getData()[0]);
     }
 
-    private void setTodayWeatherUI(CurrentlyWeatherData currentlyWeatherData) {
-        tvCondition.setText(currentlyWeatherData.getSummary());
-        tvTemperature.setText(String.valueOf(currentlyWeatherData.getTemperature()));
-        tvDay.setText(Util.covertMilliSecondToDay(this, currentlyWeatherData.getTime()));
+    private void setTodayWeatherUI(DailyWeatherData dailyWeatherData) {
+        tvDayOfToday.setText(Util.covertMilliSecondToDay(this, dailyWeatherData.getTime()));
+        tvTodayHighTemperature.setText(
+            String.valueOf(Math.round(dailyWeatherData.getApparentTemperatureHigh())));
+        tvTodayLowTemperature.setText(
+            String.valueOf(Math.round(dailyWeatherData.getApparentTemperatureLow())));
+        if (weatherForecastDetailsFragment != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(WeatherForecastDetailsFragment.WEATHER_DETAILS,
+                dailyWeatherData);
+            weatherForecastDetailsFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction()
+                .add(R.id.ll_today_weather_details, weatherForecastDetailsFragment)
+                .commit();
+        }
+    }
+
+    private void setCurrentlyWeatherUI(CurrentlyWeatherData currentlyWeatherdata) {
+        tvTodayCondition.setText(currentlyWeatherdata.getIcon().replace("-", " "));
+        tvTodayTemperature.setText(
+            String.valueOf(Math.round(currentlyWeatherdata.getTemperature())) + (char) 0x00B0);
     }
 
     private void setHourlyWeatherUI(Hourly hourlyData) {
         if (hourlyData.getData() != null) {
             hourlyWeatherAdapter.setListOfHourlyData(hourlyData.getData());
         }
+        rvHourlyData.setAdapter(hourlyWeatherAdapter);
     }
 
     private void setDailyWeatherUI(Daily dailyData) {
         if (dailyData.getData() != null) {
             dailyWeatherAdapter.setDailyWeatherData(dailyData.getData());
         }
+        rvDailyData.setAdapter(dailyWeatherAdapter);
     }
 }
