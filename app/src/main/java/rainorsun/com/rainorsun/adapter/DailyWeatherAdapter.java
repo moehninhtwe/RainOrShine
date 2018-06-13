@@ -8,20 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import java.util.List;
 import rainorsun.com.rainorsun.R;
 import rainorsun.com.rainorsun.Util;
 import rainorsun.com.rainorsun.data.api.model.DailyWeatherData;
 
 public class DailyWeatherAdapter
     extends RecyclerView.Adapter<DailyWeatherAdapter.DailyWeatherViewHolder> {
-    private DailyWeatherData[] listOfDailyWeather;
+    private List<DailyWeatherData> listOfDailyWeather;
     private Context context;
 
     public DailyWeatherAdapter(Context context) {
         this.context = context;
     }
 
-    public void setDailyWeatherData(DailyWeatherData[] listOfDailyWeather) {
+    public void setDailyWeatherData(List<DailyWeatherData> listOfDailyWeather) {
         this.listOfDailyWeather = listOfDailyWeather;
     }
 
@@ -35,17 +36,17 @@ public class DailyWeatherAdapter
     @Override public void onBindViewHolder(@NonNull DailyWeatherViewHolder dailyWeatherViewHolder,
         int position) {
         dailyWeatherViewHolder.tvHighTemperature.setText(
-            String.valueOf(Math.round(listOfDailyWeather[position].getTemperatureHigh())));
+            String.valueOf(Math.round(listOfDailyWeather.get(position).getTemperatureHigh())));
         dailyWeatherViewHolder.tvLowTemperature.setText(
-            String.valueOf(Math.round(listOfDailyWeather[position].getTemperatureLow())));
+            String.valueOf(Math.round(listOfDailyWeather.get(position).getTemperatureLow())));
         dailyWeatherViewHolder.tvDay.setText(
-            Util.covertMilliSecondToDay(context, listOfDailyWeather[position].getTime()));
+            Util.covertMilliSecondToDay(context, listOfDailyWeather.get(position).getTime()));
         dailyWeatherViewHolder.ivWeatherIcon.setImageDrawable(
-            Util.getWeatherIcon(context, listOfDailyWeather[position].getIcon()));
+            Util.getWeatherIcon(context, listOfDailyWeather.get(position).getIcon()));
     }
 
     @Override public int getItemCount() {
-        return listOfDailyWeather.length;
+        return listOfDailyWeather.size();
     }
 
     public class DailyWeatherViewHolder extends RecyclerView.ViewHolder {

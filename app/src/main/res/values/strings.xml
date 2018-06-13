@@ -8,4 +8,12 @@
   <string name="saturday">Saturday</string>
   <string name="sunday">Sunday</string>
   <string name="today">Today</string>
+  <string name="gps_network_not_enabled_title">Turn On Location Services to
+    Determine Your Location
+  </string>
+  <string name="gps_network_not_enabled">rainorsun would like to access your location to display the
+    accurate weather
+  </string>
+  <string name="open_location_settings">Setting</string>
+  <string name="Cancel">Cancel</string>
 </resources>

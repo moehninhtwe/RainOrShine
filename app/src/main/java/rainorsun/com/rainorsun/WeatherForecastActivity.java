@@ -1,11 +1,15 @@
 package rainorsun.com.rainorsun;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import rainorsun.com.rainorsun.adapter.DailyWeatherAdapter;
 import rainorsun.com.rainorsun.adapter.HourlyWeatherAdapter;
 import rainorsun.com.rainorsun.data.api.model.CurrentlyWeatherData;
@@ -14,6 +18,8 @@ import rainorsun.com.rainorsun.data.api.model.DailyWeatherData;
 import rainorsun.com.rainorsun.data.api.model.DarkSkyResponse;
 import rainorsun.com.rainorsun.data.api.model.Hourly;
 import rainorsun.com.rainorsun.data.api.provider.GetWeatherForecast;
+import rainorsun.com.rainorsun.sqliteDatabase.WeatherForecaseDBHelper;
+import rainorsun.com.rainorsun.sqliteDatabase.model.VisitedLocation;
 
 public class WeatherForecastActivity extends AppCompatActivity {
     private RecyclerView rvHourlyData;
@@ -27,6 +33,9 @@ public class WeatherForecastActivity extends AppCompatActivity {
     private TextView tvTodayHighTemperature;
     private TextView tvTodayLowTemperature;
     private WeatherForecastDetailsFragment weatherForecastDetailsFragment;
+    private LocationHandler locationHandler;
+    private VisitedLocation visitedLocation;
+    private WeatherForecaseDBHelper weatherForecaseDBHelper;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,19 +62,53 @@ public class WeatherForecastActivity extends AppCompatActivity {
         tvTodayLowTemperature = findViewById(R.id.tv_low_temperature);
 
         weatherForecastDetailsFragment = new WeatherForecastDetailsFragment();
+        locationHandler = new LocationHandler();
     }
 
     @Override protected void onResume() {
         super.onResume();
-        GetWeatherForecast.getWeatherForecast(new GetWeatherForecast.GetWeatherForecastCallBack() {
-            @Override public void onSuccess(DarkSkyResponse darkSkyResponse) {
-                setUI(darkSkyResponse);
+        getCurrentLocation();
+    }
+
+    private void getCurrentLocation() {
+        locationHandler.requestLocation(this, new LocationHandler.LocationHandlerListener() {
+            @Override public void onLocationReceived(Location location) {
+                getWeatherForecast(location);
+                getCurrentAddress(location);
             }
 
-            @Override public void onFailure(String errorMsg) {
-                Log.d("Rain or sun", errorMsg);
+            @Override public void onLocationCancelled() {
+
             }
         });
+    }
+
+    private void getWeatherForecast(Location location) {
+        GetWeatherForecast.getWeatherForecast(location,
+            new GetWeatherForecast.GetWeatherForecastCallBack() {
+                @Override public void onSuccess(DarkSkyResponse darkSkyResponse) {
+                    setUI(darkSkyResponse);
+                }
+
+                @Override public void onFailure(String errorMsg) {
+                    Log.d("Rain or sun", errorMsg);
+                }
+            });
+    }
+
+    private void getCurrentAddress(Location location) {
+        locationHandler.getCompleteAddressString(this, location.getLatitude(),
+            location.getLongitude(), address -> {
+                visitedLocation = new VisitedLocation(address,
+                    location.getLongitude() + "," + location.getLatitude());
+                tvLocation.setText(address);
+                saveVisitedLocation();
+            });
+    }
+
+    private void saveVisitedLocation() {
+        weatherForecaseDBHelper = new WeatherForecaseDBHelper(this);
+        weatherForecaseDBHelper.insertVisitedLocation(visitedLocation);
     }
 
     private void setUI(DarkSkyResponse darkSkyResponse) {
@@ -81,7 +124,7 @@ public class WeatherForecastActivity extends AppCompatActivity {
             String.valueOf(Math.round(dailyWeatherData.getApparentTemperatureHigh())));
         tvTodayLowTemperature.setText(
             String.valueOf(Math.round(dailyWeatherData.getApparentTemperatureLow())));
-        if (weatherForecastDetailsFragment != null) {
+        if (weatherForecastDetailsFragment != null && !weatherForecastDetailsFragment.isAdded()) {
             Bundle bundle = new Bundle();
             bundle.putSerializable(WeatherForecastDetailsFragment.WEATHER_DETAILS,
                 dailyWeatherData);
@@ -107,7 +150,10 @@ public class WeatherForecastActivity extends AppCompatActivity {
 
     private void setDailyWeatherUI(Daily dailyData) {
         if (dailyData.getData() != null) {
-            dailyWeatherAdapter.setDailyWeatherData(dailyData.getData());
+            List<DailyWeatherData> listOfDailyWeatherData =
+                new ArrayList<>(Arrays.asList(dailyData.getData()));
+            listOfDailyWeatherData.remove(0);
+            dailyWeatherAdapter.setDailyWeatherData(listOfDailyWeatherData);
         }
         rvDailyData.setAdapter(dailyWeatherAdapter);
     }

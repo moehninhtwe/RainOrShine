@@ -12,4 +12,6 @@ public class Constant {
     public static final String PARTLY_CLOUDY = "partly-cloudy";
     public static final String PARTLY__CLOUDY_NIGHT = "partly-cloudy-night";
     public static final String PARTLY_CLOUDY_DAY = "partly-cloudy-day";
+
+    public static final int REQUEST_CODE_LOCATION = 2;
 }
