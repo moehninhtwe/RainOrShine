@@ -1,11 +1,15 @@
 package rainorsun.com.rainorsun;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +22,6 @@ import rainorsun.com.rainorsun.data.api.model.DailyWeatherData;
 import rainorsun.com.rainorsun.data.api.model.DarkSkyResponse;
 import rainorsun.com.rainorsun.data.api.model.Hourly;
 import rainorsun.com.rainorsun.data.api.provider.GetWeatherForecast;
-import rainorsun.com.rainorsun.sqliteDatabase.WeatherForecaseDBHelper;
 import rainorsun.com.rainorsun.sqliteDatabase.model.VisitedLocation;
 
 public class WeatherForecastActivity extends AppCompatActivity {
@@ -34,8 +37,6 @@ public class WeatherForecastActivity extends AppCompatActivity {
     private TextView tvTodayLowTemperature;
     private WeatherForecastDetailsFragment weatherForecastDetailsFragment;
     private LocationHandler locationHandler;
-    private VisitedLocation visitedLocation;
-    private WeatherForecaseDBHelper weatherForecaseDBHelper;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +71,23 @@ public class WeatherForecastActivity extends AppCompatActivity {
         getCurrentLocation();
     }
 
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_more:
+                Intent intent = new Intent(this, WeatherForecastForVisitedLocationActivity.class);
+                startActivity(intent);
+                break;
+            default:
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void getCurrentLocation() {
         locationHandler.requestLocation(this, new LocationHandler.LocationHandlerListener() {
             @Override public void onLocationReceived(Location location) {
@@ -99,16 +117,15 @@ public class WeatherForecastActivity extends AppCompatActivity {
     private void getCurrentAddress(Location location) {
         locationHandler.getCompleteAddressString(this, location.getLatitude(),
             location.getLongitude(), address -> {
-                visitedLocation = new VisitedLocation(address,
+                VisitedLocation visitedLocation = new VisitedLocation(address,
                     location.getLongitude() + "," + location.getLatitude());
                 tvLocation.setText(address);
-                saveVisitedLocation();
+                saveVisitedLocation(visitedLocation);
             });
     }
 
-    private void saveVisitedLocation() {
-        weatherForecaseDBHelper = new WeatherForecaseDBHelper(this);
-        weatherForecaseDBHelper.insertVisitedLocation(visitedLocation);
+    private void saveVisitedLocation(VisitedLocation visitedLocation) {
+        new DatabaseHandler(this).saveVisitedLocation(visitedLocation);
     }
 
     private void setUI(DarkSkyResponse darkSkyResponse) {

@@ -47,11 +47,11 @@ public class WeatherForecaseDBHelper extends SQLiteOpenHelper {
         boolean isAlreadySaved = false;
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  * FROM " + VisitedLocation.TABLE_NAME + " WHERE "
-            + VisitedLocation.COLUMN_NAME_LOCATION_ADDRESS + "='" + visitedLocation.getAddress()
-            + "'";
+            + VisitedLocation.COLUMN_NAME_LOCATION_ADDRESS + "=\"" + visitedLocation.getAddress()
+            + "\"";
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        if (cursor.moveToFirst()) isAlreadySaved = true;
+        if (cursor.getCount() > 1) isAlreadySaved = true;
         return isAlreadySaved;
     }
 

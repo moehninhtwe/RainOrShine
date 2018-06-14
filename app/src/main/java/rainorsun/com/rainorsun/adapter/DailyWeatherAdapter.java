@@ -1,6 +1,7 @@
 package rainorsun.com.rainorsun.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import java.util.List;
 import rainorsun.com.rainorsun.R;
 import rainorsun.com.rainorsun.Util;
+import rainorsun.com.rainorsun.WeatherDetailsActivity;
+import rainorsun.com.rainorsun.WeatherForecastDetailsFragment;
 import rainorsun.com.rainorsun.data.api.model.DailyWeatherData;
 
 public class DailyWeatherAdapter
@@ -43,6 +46,14 @@ public class DailyWeatherAdapter
             Util.covertMilliSecondToDay(context, listOfDailyWeather.get(position).getTime()));
         dailyWeatherViewHolder.ivWeatherIcon.setImageDrawable(
             Util.getWeatherIcon(context, listOfDailyWeather.get(position).getIcon()));
+        dailyWeatherViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                Intent intent = new Intent(context, WeatherDetailsActivity.class);
+                intent.putExtra(WeatherForecastDetailsFragment.WEATHER_DETAILS,
+                    listOfDailyWeather.get(position));
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override public int getItemCount() {
