@@ -9,7 +9,8 @@
       android:id="@+id/tv_time"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textSize="20sp"/>
+      android:textSize="@dimen/small_font"
+      android:textColor="@color/textColor"/>
 
   <ImageView
       android:id="@+id/iv_weather_icon"
@@ -21,7 +22,8 @@
       android:id="@+id/tv_temperature"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textSize="20sp"
-      android:layout_gravity="center"/>
+      android:textSize="@dimen/small_font"
+      android:layout_gravity="center"
+      android:textColor="@color/textColor"/>
 
 </LinearLayout>

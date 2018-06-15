@@ -1,7 +1,6 @@
-package rainorsun.com.rainorsun.adapter;
+package rainorsun.com.rainorsun.ui.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,18 +10,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.List;
 import rainorsun.com.rainorsun.R;
-import rainorsun.com.rainorsun.Util;
-import rainorsun.com.rainorsun.WeatherDetailsActivity;
-import rainorsun.com.rainorsun.WeatherForecastDetailsFragment;
+import utils.Util;
 import rainorsun.com.rainorsun.data.api.model.DailyWeatherData;
 
 public class DailyWeatherAdapter
     extends RecyclerView.Adapter<DailyWeatherAdapter.DailyWeatherViewHolder> {
     private List<DailyWeatherData> listOfDailyWeather;
     private Context context;
+    private OnWeatherForecastClickListener onWeatherForecastClickListener;
 
-    public DailyWeatherAdapter(Context context) {
+    public DailyWeatherAdapter(Context context,
+        OnWeatherForecastClickListener onWeatherForecastClickListener) {
         this.context = context;
+        this.onWeatherForecastClickListener = onWeatherForecastClickListener;
     }
 
     public void setDailyWeatherData(List<DailyWeatherData> listOfDailyWeather) {
@@ -43,17 +43,12 @@ public class DailyWeatherAdapter
         dailyWeatherViewHolder.tvLowTemperature.setText(
             String.valueOf(Math.round(listOfDailyWeather.get(position).getTemperatureLow())));
         dailyWeatherViewHolder.tvDay.setText(
-            Util.covertMilliSecondToDay(context, listOfDailyWeather.get(position).getTime()));
+            Util.covertMilliSecondToDay(listOfDailyWeather.get(position).getTime()));
         dailyWeatherViewHolder.ivWeatherIcon.setImageDrawable(
             Util.getWeatherIcon(context, listOfDailyWeather.get(position).getIcon()));
-        dailyWeatherViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                Intent intent = new Intent(context, WeatherDetailsActivity.class);
-                intent.putExtra(WeatherForecastDetailsFragment.WEATHER_DETAILS,
-                    listOfDailyWeather.get(position));
-                context.startActivity(intent);
-            }
-        });
+        dailyWeatherViewHolder.itemView.setOnClickListener(
+            view -> onWeatherForecastClickListener.onWeatherForecastClick(view,
+                listOfDailyWeather.get(position)));
     }
 
     @Override public int getItemCount() {
@@ -73,5 +68,9 @@ public class DailyWeatherAdapter
             tvLowTemperature = view.findViewById(R.id.tv_low_temperature);
             ivWeatherIcon = view.findViewById(R.id.iv_weather_icon);
         }
+    }
+
+    public interface OnWeatherForecastClickListener {
+        void onWeatherForecastClick(View view, DailyWeatherData dailyWeatherData);
     }
 }

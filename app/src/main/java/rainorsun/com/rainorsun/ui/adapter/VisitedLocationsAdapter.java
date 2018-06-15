@@ -1,4 +1,4 @@
-package rainorsun.com.rainorsun.adapter;
+package rainorsun.com.rainorsun.ui.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import java.util.List;
-import rainorsun.com.rainorsun.DatabaseHandler;
+import utils.DatabaseHandler;
 import rainorsun.com.rainorsun.R;
 import rainorsun.com.rainorsun.sqliteDatabase.model.VisitedLocation;
 
@@ -17,9 +17,12 @@ public class VisitedLocationsAdapter
     extends RecyclerView.Adapter<VisitedLocationsAdapter.VisitedLocationsViewHolder> {
     private List<VisitedLocation> listOfVisitedLocations;
     private Context context;
+    private OnVisitedLocationClickListener onVisitedLocationClickListener;
 
-    public VisitedLocationsAdapter(Context context) {
+    public VisitedLocationsAdapter(Context context,
+        OnVisitedLocationClickListener onVisitedLocationClickListener) {
         this.context = context;
+        this.onVisitedLocationClickListener = onVisitedLocationClickListener;
     }
 
     public void setListOfVisitedLocations(List<VisitedLocation> listOfVisitedLocations) {
@@ -36,11 +39,15 @@ public class VisitedLocationsAdapter
     @Override
     public void onBindViewHolder(@NonNull VisitedLocationsViewHolder holder, int position) {
         holder.tvVisitedLocation.setText(listOfVisitedLocations.get(position).getAddress());
-        holder.btnRemove.setOnClickListener(view -> new DatabaseHandler(context).removeVisitedLocation(
-            listOfVisitedLocations.get(position), () -> {
-                listOfVisitedLocations.remove(position);
-                notifyDataSetChanged();
-            }));
+        holder.btnRemove.setOnClickListener(
+            view -> new DatabaseHandler(context).removeVisitedLocation(
+                listOfVisitedLocations.get(position), () -> {
+                    listOfVisitedLocations.remove(position);
+                    notifyDataSetChanged();
+                }));
+        holder.itemView.setOnClickListener(
+            view -> onVisitedLocationClickListener.onClickVisitedLocation(
+                listOfVisitedLocations.get(position)));
     }
 
     @Override public int getItemCount() {
@@ -56,5 +63,9 @@ public class VisitedLocationsAdapter
             tvVisitedLocation = view.findViewById(R.id.tv_visited_location);
             btnRemove = view.findViewById(R.id.btn_remove);
         }
+    }
+
+    public interface OnVisitedLocationClickListener {
+        void onClickVisitedLocation(VisitedLocation visitedLocation);
     }
 }

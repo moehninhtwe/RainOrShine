@@ -8,6 +8,7 @@
   <string name="saturday">Saturday</string>
   <string name="sunday">Sunday</string>
   <string name="today">Today</string>
+  <string name="now">Now</string>
   <string name="gps_network_not_enabled_title">Turn On Location Services to
     Determine Your Location
   </string>
@@ -16,4 +17,14 @@
   </string>
   <string name="open_location_settings">Setting</string>
   <string name="Cancel">Cancel</string>
+  <string name="sunrise">SUNRISE</string>
+  <string name="sunset">SUNSET</string>
+  <string name="chance_of_rain">CHANCE OF RAIN</string>
+  <string name="humidity">HUMIDITY</string>
+  <string name="wind">WIND</string>
+  <string name="feels_like">FEELS LIKE</string>
+  <string name="precipitation">PRECIPITATION</string>
+  <string name="pressure">PRESSURE</string>
+  <string name="visiblity">VISIBILITY</string>
+  <string name="uv_index">UV INDEX</string>
 </resources>

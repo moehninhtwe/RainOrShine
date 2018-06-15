@@ -15,16 +15,19 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
-    <activity android:name=".WeatherForecastActivity">
+    <activity android:name=".ui.WeatherForecastActivity"
+        android:launchMode="singleTop">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
 
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
-    <activity android:name=".WeatherForecastForVisitedLocationActivity"/>
     <activity
-        android:name=".WeatherDetailsActivity"
+        android:name=".ui.WeatherForecastForVisitedLocationActivity"
+        android:launchMode="singleTop"/>
+    <activity
+        android:name=".ui.WeatherDetailsActivity"
         android:launchMode="singleTop">
     </activity>
   </application>

@@ -1,4 +1,4 @@
-package rainorsun.com.rainorsun;
+package rainorsun.com.rainorsun.ui;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,10 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import rainorsun.com.rainorsun.R;
 import rainorsun.com.rainorsun.data.api.model.DailyWeatherData;
+import utils.Util;
 
 public class WeatherForecastDetailsFragment extends Fragment {
     public static String WEATHER_DETAILS = "weather_details";
+    private TextView tvSummary;
     private TextView tvSunrise;
     private TextView tvChanceOfRain;
     private TextView tvWind;
@@ -45,6 +48,8 @@ public class WeatherForecastDetailsFragment extends Fragment {
         tvPressure = view.findViewById(R.id.tv_pressure);
 
         tvUVIndex = view.findViewById(R.id.tv_uv_index);
+        tvSummary = view.findViewById(R.id.tv_summary);
+
         if (getArguments() != null) {
             setWeatherDetails((DailyWeatherData) getArguments().getSerializable(WEATHER_DETAILS));
         }
@@ -81,6 +86,7 @@ public class WeatherForecastDetailsFragment extends Fragment {
             tvPressure.setText(String.valueOf(Math.round(dailyWeatherData.getPressure())) + " hPa");
 
             tvUVIndex.setText(String.valueOf(dailyWeatherData.getUvIndex()));
+            tvSummary.setText(dailyWeatherData.getSummary());
         }
     }
 

@@ -3,12 +3,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/between_items_padding_top"
+    android:paddingBottom="5dp">
   <TextView
       android:id="@+id/tv_visited_location"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:gravity="left"
+      android:gravity="start|center_horizontal"
+      android:textSize="@dimen/small_font"
+      android:textColor="@color/textColor"
+      android:paddingTop="8dp"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toLeftOf="@+id/btn_remove"
       app:layout_constraintHorizontal_weight="3"
@@ -18,7 +23,9 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:text="Remove"
-      android:gravity="right"
+      android:textColor="@color/textColor"
+      android:textAlignment="center"
+      android:paddingTop="10dp"
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintLeft_toRightOf="@+id/tv_visited_location"
       app:layout_constraintHorizontal_weight="1"/>

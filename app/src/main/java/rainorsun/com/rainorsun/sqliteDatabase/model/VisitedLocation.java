@@ -1,6 +1,8 @@
 package rainorsun.com.rainorsun.sqliteDatabase.model;
 
-public class VisitedLocation {
+import java.io.Serializable;
+
+public class VisitedLocation implements Serializable {
     public static final String TABLE_NAME = "visitedLocation";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_NAME_LOCATION_ADDRESS = "address";

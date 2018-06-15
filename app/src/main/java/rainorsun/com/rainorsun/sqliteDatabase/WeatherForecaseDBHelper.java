@@ -38,7 +38,7 @@ public class WeatherForecaseDBHelper extends SQLiteOpenHelper {
             values.put(VisitedLocation.COLUMN_NAME_LOCATION_ADDRESS, visitedLocation.getAddress());
             values.put(VisitedLocation.COLUMN_NAME_LOCATION_COORDINATES,
                 visitedLocation.getCoordinate());
-            db.insert(VisitedLocation.TABLE_NAME, null, values);
+            long key = db.insert(VisitedLocation.TABLE_NAME, null, values);
             db.close();
         }
     }
@@ -51,7 +51,7 @@ public class WeatherForecaseDBHelper extends SQLiteOpenHelper {
             + "\"";
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        if (cursor.getCount() > 1) isAlreadySaved = true;
+        if (cursor.getCount() >= 1) isAlreadySaved = true;
         return isAlreadySaved;
     }
 

@@ -2,19 +2,19 @@ package rainorsun.com.rainorsun.data.api.model;
 
 public class DailyWeatherData extends WeatherData {
     private float apparentTemperatureHigh;
-    private float apparentTemperatureHighTime;
+    private long apparentTemperatureHighTime;
     private float apparentTemperatureLow;
-    private float apparentTemperatureLowTime;
+    private long apparentTemperatureLowTime;
     private float moonPhase;
     private float precipAccumulation;
     private float precipIntensityMax;
-    private float precipIntensityMaxTime;
+    private long precipIntensityMaxTime;
     private long sunriseTime;
     private long sunsetTime;
     private float temperatureHigh;
-    private float temperatureHighTime;
+    private long temperatureHighTime;
     private float temperatureLow;
-    private float temperatureLowTime;
+    private long temperatureLowTime;
     private long uvIndexTime;
 
     public float getApparentTemperatureHigh() {
@@ -25,11 +25,11 @@ public class DailyWeatherData extends WeatherData {
         this.apparentTemperatureHigh = apparentTemperatureHigh;
     }
 
-    public float getApparentTemperatureHighTime() {
+    public long getApparentTemperatureHighTime() {
         return apparentTemperatureHighTime;
     }
 
-    public void setApparentTemperatureHighTime(float apparentTemperatureHighTime) {
+    public void setApparentTemperatureHighTime(long apparentTemperatureHighTime) {
         this.apparentTemperatureHighTime = apparentTemperatureHighTime;
     }
 
@@ -41,11 +41,11 @@ public class DailyWeatherData extends WeatherData {
         this.apparentTemperatureLow = apparentTemperatureLow;
     }
 
-    public float getApparentTemperatureLowTime() {
+    public long getApparentTemperatureLowTime() {
         return apparentTemperatureLowTime;
     }
 
-    public void setApparentTemperatureLowTime(float apparentTemperatureLowTime) {
+    public void setApparentTemperatureLowTime(long apparentTemperatureLowTime) {
         this.apparentTemperatureLowTime = apparentTemperatureLowTime;
     }
 
@@ -73,11 +73,11 @@ public class DailyWeatherData extends WeatherData {
         this.precipIntensityMax = precipIntensityMax;
     }
 
-    public float getPrecipIntensityMaxTime() {
+    public long getPrecipIntensityMaxTime() {
         return precipIntensityMaxTime;
     }
 
-    public void setPrecipIntensityMaxTime(float precipIntensityMaxTime) {
+    public void setPrecipIntensityMaxTime(long precipIntensityMaxTime) {
         this.precipIntensityMaxTime = precipIntensityMaxTime;
     }
 
@@ -105,11 +105,11 @@ public class DailyWeatherData extends WeatherData {
         this.temperatureHigh = temperatureHigh;
     }
 
-    public float getTemperatureHighTime() {
+    public long getTemperatureHighTime() {
         return temperatureHighTime;
     }
 
-    public void setTemperatureHighTime(float temperatureHighTime) {
+    public void setTemperatureHighTime(long temperatureHighTime) {
         this.temperatureHighTime = temperatureHighTime;
     }
 
@@ -121,11 +121,11 @@ public class DailyWeatherData extends WeatherData {
         this.temperatureLow = temperatureLow;
     }
 
-    public float getTemperatureLowTime() {
+    public long getTemperatureLowTime() {
         return temperatureLowTime;
     }
 
-    public void setTemperatureLowTime(float temperatureLowTime) {
+    public void setTemperatureLowTime(long temperatureLowTime) {
         this.temperatureLowTime = temperatureLowTime;
     }
 

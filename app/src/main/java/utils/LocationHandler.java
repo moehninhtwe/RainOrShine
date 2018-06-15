@@ -1,9 +1,7 @@
-package rainorsun.com.rainorsun;
+package utils;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Criteria;
@@ -12,14 +10,13 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import rainorsun.com.rainorsun.Constant;
 
 public class LocationHandler {
     private LocationHandlerListener locationHandlerListener;
@@ -45,42 +42,10 @@ public class LocationHandler {
                 (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             boolean gpsEnabled;
             boolean networkEnabled;
-
-            try {
-                gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                networkEnabled =
-                    locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-                if (gpsEnabled || networkEnabled) {
-                    getCurrentLocation(context);
-                } else {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                    dialog.setTitle(
-                        context.getResources().getString(R.string.gps_network_not_enabled_title));
-                    dialog.setMessage(
-                        context.getResources().getString(R.string.gps_network_not_enabled));
-                    dialog.setPositiveButton(
-                        context.getResources().getString(R.string.open_location_settings),
-                        (paramDialogInterface, paramInt) -> {
-                            Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                            context.startActivity(myIntent);
-                            //get gps
-                        });
-                    dialog.setNegativeButton(context.getString(R.string.Cancel),
-                        (paramDialogInterface, paramInt) -> {
-                            if (locationHandlerListener != null) {
-                                locationHandlerListener.onLocationCancelled();
-                            }
-                        });
-
-                    if (Build.VERSION.SDK_INT >= 17) {
-                        if (locationHandlerListener != null) {
-                            dialog.setOnDismissListener(
-                                dialog1 -> locationHandlerListener.onLocationCancelled());
-                        }
-                    }
-                    dialog.show();
-                }
-            } catch (Exception ex) {
+            gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            if (gpsEnabled || networkEnabled) {
+                getCurrentLocation(context);
             }
         }
     }
@@ -192,7 +157,6 @@ public class LocationHandler {
     public void requestLocation(Context context, LocationHandlerListener locationHandlerListener) {
         checkLocationService(context);
         this.locationHandlerListener = locationHandlerListener;
-        //getCurrentLocation(context);
     }
 
     public interface LocationHandlerListener {

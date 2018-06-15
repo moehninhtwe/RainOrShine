@@ -1,4 +1,4 @@
-package rainorsun.com.rainorsun.adapter;
+package rainorsun.com.rainorsun.ui.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import rainorsun.com.rainorsun.R;
-import rainorsun.com.rainorsun.Util;
+import utils.Util;
 import rainorsun.com.rainorsun.data.api.model.HourlyWeatherData;
 
 public class HourlyWeatherAdapter
@@ -34,11 +34,16 @@ public class HourlyWeatherAdapter
 
     @Override public void onBindViewHolder(@NonNull HourlyWeatherViewHolder hourlyWeatherViewHolder,
         int position) {
+        if(position == 0) {
+            hourlyWeatherViewHolder.tvTime.setText(context.getString(R.string.now));
+        } else {
+            hourlyWeatherViewHolder.tvTime.setText(
+                Util.convertMilliSecondToHourFormat(listOfHourlyData[position].getTime()));
+        }
         hourlyWeatherViewHolder.tvTemperature.setText(
             String.valueOf(Math.round(listOfHourlyData[position].getTemperature()))
                 + (char) 0x00B0);
-        hourlyWeatherViewHolder.tvTime.setText(
-            Util.convertMilliSecondToHourFormat(listOfHourlyData[position].getTime()));
+
         hourlyWeatherViewHolder.ivWeatherIcon.setImageDrawable(
             Util.getWeatherIcon(context, listOfHourlyData[position].getIcon()));
     }
